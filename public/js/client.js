@@ -1,7 +1,9 @@
+const baseUrl = 'http://localhost:3000';
+
 const clientEl = document.getElementById('remote-client');
 
 const socketEl = document.createElement('script');
-socketEl.src = '/socket.io/socket.io.js';
+socketEl.src = baseUrl + '/socket.io/socket.io.js';
 
 insertBefore(socketEl, clientEl);
 

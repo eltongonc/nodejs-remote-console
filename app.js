@@ -1,12 +1,11 @@
 const express = require('express');
 const path = require('path');
-const exphbs  = require('express-handlebars');
 const http = require('http');
-
-const clientRoute = require('./routes/index');
+const fs = require('fs');
 
 const app = express();
-const server = http.Server(app);
+const server = http.createServer(app);
+
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
@@ -17,18 +16,37 @@ require('./sockets')(app, server);
 
 app.set('port', port);
 
-// view engine setup
-
-app.engine('handlebars', exphbs({
-  defaultLayout: 'main',
-  partialsDir: ['views/partials/']
-}));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'handlebars');
-
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/', clientRoute);
+app.use('/', express.static(path.join(__dirname, 'build')));
+
+/**
+ * Client connection url
+ */
+app.get('/client.js', (req, res) => {
+    const clientPath = path.resolve(__dirname, 'public/js');
+    console.log(clientPath);
+    
+    fs.exists(clientPath, (exists) => {
+      // if the file is not found, return 404
+      if(!exists) {
+        res.statusCode = 404;
+        res.end(`File ${clientPath} not found!`);
+        return;
+      }
+  
+      // read file from file system
+      fs.readFile(clientPath + '/client.js', function(err, data){
+        if(err){
+          res.statusCode = 500;
+          res.end(`Error getting the file: ${err}.`);
+        } else {
+          res.end(data);
+        }
+      });
+    })
+  });
 
 /// catch 404 and forward to error handler
 app.use((req, res, next) => {
