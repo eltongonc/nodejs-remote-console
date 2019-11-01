@@ -1,4 +1,4 @@
-const canvas = document.createElement('textarea');
+const canvas = document.createElement('div');
 
 window.addEventListener('load', () => {
 	const io = window.io();
@@ -8,7 +8,6 @@ window.addEventListener('load', () => {
 	io.on('new-connection', () => {
 		displayMessage('Connected...');
 	});
-
 
 	io.on('display-log', (message) => {
 		console.log(message);
@@ -24,8 +23,10 @@ window.addEventListener('load', () => {
 
 });
 
-function displayMessage(string) {
-	const message = string + '\n';
-	canvas.innerHTML += message 
+function displayMessage(message) {
+	const el = document.createElement('p');
+	el.innerHTML = message;
+
+	canvas.appendChild(el);
 }
 

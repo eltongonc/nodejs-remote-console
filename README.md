@@ -17,3 +17,4 @@ A frontend project can use this tool as a debug tool. The project needs to creat
 - [ ] Prettify the incoming data and display it on the frontend
 - [ ] Allow users
 - [ ] Add rooms to track different projects seperate.
+- [ ] Implement React.js on the frontend.
