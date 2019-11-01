@@ -8,7 +8,7 @@ socketEl.src = baseUrl + '/socket.io/socket.io.js';
 insertBefore(socketEl, clientEl);
 
 /**
- * Inserts an html element before a specifi
+ * Inserts an html element before a specific element
  * @param {HTMLnode} el The html element you want to insert
  * @param {HTMLnode} referenceNode The html element you want to insert el before
  */
