@@ -4,7 +4,7 @@
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "dev": "gulp"
   },
   "dependencies": {
@@ -16,9 +16,10 @@
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-sass": "^3.0.0",
-    "gulp-nodemon": "^2.0.2",
     "gulp-livereload": "^3.8.0",
-    "gulp-plumber": "^1.0.0"
+    "gulp-nodemon": "^2.0.2",
+    "gulp-plumber": "^1.0.0",
+    "gulp-sass": "^3.0.0",
+    "nodemon": "^1.19.4"
   }
 }
