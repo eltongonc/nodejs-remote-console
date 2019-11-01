@@ -1,12 +1,14 @@
+const baseUrl = 'http://localhost:3000';
+
 const clientEl = document.getElementById('remote-client');
 
 const socketEl = document.createElement('script');
-socketEl.src = '/socket.io/socket.io.js';
+socketEl.src = baseUrl + '/socket.io/socket.io.js';
 
 insertBefore(socketEl, clientEl);
 
 /**
- * Inserts an html element before a specifi
+ * Inserts an html element before a specific element
  * @param {HTMLnode} el The html element you want to insert
  * @param {HTMLnode} referenceNode The html element you want to insert el before
  */
@@ -33,7 +35,7 @@ window.addEventListener('load', () => {
  */
 class RemoteConsole {
     constructor() {
-        this.socket = window.io();
+        this.socket = window.io(baseUrl);
 
         window.addEventListener('error', (e) => {
             const error = {
