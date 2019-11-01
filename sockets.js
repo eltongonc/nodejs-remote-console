@@ -5,10 +5,18 @@ module.exports = function sockets(app, server){
     // socket events
     io.on('connection', function(client){
         console.log('new connection', client.id);
+        client.emit('new-connection');
 
         client.on('log', (message) => {
             // create ui to parse the message on the ui
             console.log(JSON.parse(message));
+            client.emit('display-log', message);
+        });
+
+        client.on('error-log', (message) => {
+            // create ui to parse the message on the ui
+            console.log(JSON.parse(message));
+            client.emit('display-error', message);
         });
 
         // Whenever a user shuts down the browser
