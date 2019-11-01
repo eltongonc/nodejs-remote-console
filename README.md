@@ -21,4 +21,5 @@ A frontend project can use this tool as a debug tool. The project needs to creat
 - [ ] Allow users to log different projects within their login.
 - [ ] Add rooms to track different projects seperate.
 - [ ] Implement React.js on the frontend.
-- [ ] Add database to store previous messages
+- [ ] Add database to store previous messages.
+- [ ] Generate an unique id for each project (window.origin).

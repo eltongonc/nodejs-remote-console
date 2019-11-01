@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "dev": "gulp"
+    "dev": "gulp",
+    "build": "rm -rf ./build && cp -r ./dashboard/build ./build"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
