@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, Divider, Tag } from 'antd';
+import moment from 'moment';
 
 function TableView({dataSource}) {
 	const columns = [
@@ -12,26 +13,25 @@ function TableView({dataSource}) {
 			title: 'Date',
 			dataIndex: 'date',
 			key: 'date',
+			render: date => moment(date, 'DD/MM/YYYY'),
 		},
 		{
 			title: 'Type',
 			key: 'type',
 			dataIndex: 'type',
-			render: tags => (
-			  <span>
-				{tags.map(tag => {
-				  let color = tag.length > 5 ? 'geekblue' : 'green';
-				  if (tag === 'error') {
+			render: tag => {
+				let color = tag.length > 5 ? 'geekblue' : 'green';
+				if (tag === 'error') {
 					color = 'volcano';
-				  }
-				  return (
-					<Tag color={color} key={tag}>
-					  {tag.toUpperCase()}
-					</Tag>
-				  );
-				})}
-			  </span>
-			),
+				}
+				return (
+					<span>
+						<Tag color={color} key={tag}>
+							{tag.toUpperCase()}
+						</Tag>
+					</span>
+				)
+			},
 		},
 	];
 	

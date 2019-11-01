@@ -145,17 +145,17 @@ class App extends React.Component {
               <TableView dataSource={this.state.logs.map((item) => {
                 return {
                   name: item,
-                  date: new Date,
+                  date: new Date().toString(),
                   type: 'log',
                 };
               })}/>
-              
+
               <br/>
               <Title level={4}>Errors</Title>
               <TableView dataSource={this.state.errors.map((item) => {
                 return {
                   name: item,
-                  date: new Date,
+                  date: new Date().toString(),
                   type: 'error',
                 };
               })}/>

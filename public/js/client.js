@@ -35,7 +35,7 @@ window.addEventListener('load', () => {
  */
 class RemoteConsole {
     constructor() {
-        this.socket = window.io();
+        this.socket = window.io(baseUrl);
 
         window.addEventListener('error', (e) => {
             const error = {
