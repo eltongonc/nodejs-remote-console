@@ -12,21 +12,22 @@ app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
 
 // init sockets
-require('./sockets')(app, server);
+require('./sockets')(server);
 
 app.set('port', port);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/', express.static(path.join(__dirname, 'build')));
+// Ensure we allow the react app to handle the routing
+app.use('*', express.static(path.join(__dirname, 'build')));
 
 /**
  * Client connection url
+ * Can also be accesed through /js/client.js
  */
 app.get('/client.js', (req, res) => {
     const clientPath = path.resolve(__dirname, 'public/js');
-    console.log(clientPath);
     
     fs.exists(clientPath, (exists) => {
       // if the file is not found, return 404
@@ -46,39 +47,38 @@ app.get('/client.js', (req, res) => {
         }
       });
     })
-  });
+});
 
-/// catch 404 and forward to error handler
+
+/**
+ * catch 404 and forward to error handler
+ * if react-router handles the routing is this needed?
+ */
 app.use((req, res, next) => {
     const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
-/// error handlers
+
+/**
+ * Not sure if i should catch the errors in the UI depending on the env
+ */
 
 // development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
     app.use((err, req, res, next) => {
         res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err,
-            title: 'error'
-        });
+        // redirect to a page on the UI that catches the error and logs it
+        res.redirect('/500')
     });
 }
 
 // production error handler
-// no stacktraces leaked to user
 app.use((err, req, res, next) => {
     res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {},
-        title: 'error'
-    });
+    // redirect to a page on the UI that catches the error and logs it
+    res.redirect('/500')
 });
 
 

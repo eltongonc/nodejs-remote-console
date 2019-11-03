@@ -17,22 +17,26 @@ function insertBefore(el, referenceNode) {
 }
 
 
+/**
+ * This bit of code is to test if the RemoteConsole class works
+ */
 window.addEventListener('load', () => {
     // init the socket connection
     const rc = new RemoteConsole();
 
+    // Test log
     rc.log('New Connection Init...');
+
+    // Test error manually
     rc.error('New Error');
 
+    // Test error
     setTimeout(()=> {
         asd
     }, 1000);
 });
 
 
-/**
- * 
- */
 class RemoteConsole {
     constructor() {
         this.socket = window.io(baseUrl);
