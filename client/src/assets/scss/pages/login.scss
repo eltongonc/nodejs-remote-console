@@ -1,0 +1,29 @@
+.login-form {
+	height: 100%;
+	background-color: #fbfbfb;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	.form {
+		max-width: calc(300px + 4rem);
+		background-color: white;
+		padding: 2rem;
+		.form-title {
+			text-align: center;
+		}
+		.ant-btn {
+			width: 100%;
+			&:first-of-type {
+				margin-bottom: 1rem;
+			}
+		}
+	}
+}
+
+.login-form-forgot {
+float: right;
+}
+
+.login-form-button {
+width: 100%;
+}

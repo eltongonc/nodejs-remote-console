@@ -11,6 +11,9 @@
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "node-sass": "^4.13.0",
+    "passport": "^0.4.0",
+    "passport-google-oauth2": "^0.2.0",
+    "react-router-dom": "^5.1.2",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
