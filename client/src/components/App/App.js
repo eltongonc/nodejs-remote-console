@@ -3,9 +3,9 @@ import "antd/dist/antd.css";
 import { Layout, Menu, Breadcrumb, Icon, Col, Card, Row, Typography } from 'antd';
 
 import './App.css';
-import socket from './components/socket';
-import { openNotificationWithIcon } from './components/notifications';
-import TableView from './components/Table';
+import socket from '../socket';
+import { openNotificationWithIcon } from '../notifications';
+import TableView from '../Table';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
