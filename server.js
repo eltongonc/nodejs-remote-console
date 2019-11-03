@@ -27,16 +27,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use('*', express.static(path.join(__dirname, 'build')));
 
 app.get('/login/:strategy', (req, res) => {
-  p
+  console.log('bla')
 });
-
-// passport google callback url
-app.get('/login/auth/callback', 
-    passport.authenticate( 'google', { 
-      successRedirect: '/login/success',
-      failureRedirect: '/login/failure',
-    })
-);
 
 /**
  * Client connection url
