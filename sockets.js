@@ -1,4 +1,4 @@
-module.exports = function sockets(app, server){
+module.exports = function sockets(server){
     socketIO = require('socket.io') // websockets
     io = socketIO.listen(server);
 
