@@ -31,7 +31,7 @@ class Login extends React.Component {
 				<div className="form">
 					<Title className="form-title" level={4}>Login</Title>
 
-					<Form onSubmit={this.handleSubmit} className="form ant-card">
+					<Form onSubmit={this.handleSubmit} className="ant-card">
 						<Form.Item>
 						{getFieldDecorator('username', {
 							rules: [{ required: true, message: 'Please input your username!' }],
