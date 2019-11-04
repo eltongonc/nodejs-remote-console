@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const fs = require('fs');
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 
 const passport = require('./lib/passport');
 
@@ -17,7 +17,7 @@ app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
 
 // init database
-require('./lib/db').mongoose;
+require('./lib/db');
 
 // init sockets
 require('./lib/sockets')(server);
@@ -25,10 +25,19 @@ require('./lib/sockets')(server);
 
 app.set('port', port);
 
-app.use(cookieParser());
+app.use(cookieSession({
+  maxAge: 24*60*60*1000,
+  keys: [process.env.COOKIE_KEY]
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
 
+/**
+ * Initialize passport
+ */
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * Passport auth urls
