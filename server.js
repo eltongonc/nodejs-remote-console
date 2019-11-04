@@ -1,10 +1,12 @@
+require('dotenv').config()
+
 const express = require('express');
 const path = require('path');
 const http = require('http');
 const fs = require('fs');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
-const passport = require('./passport');
+const passport = require('./lib/passport');
 
 const app = express();
 const server = http.createServer(app);
@@ -14,20 +16,30 @@ const env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
 
+// init database
+require('./lib/db').mongoose;
+
 // init sockets
-require('./sockets')(server);
+require('./lib/sockets')(server);
+
 
 app.set('port', port);
 
-app.user(cookieParser());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
 
-// Ensure we allow the react app to handle the routing
-app.use('*', express.static(path.join(__dirname, 'build')));
 
-app.get('/login/:strategy', (req, res) => {
-  console.log('bla')
+/**
+ * Passport auth urls
+ */
+app.get('/login/google', passport.authenticate('google', {
+      scope: ['email', 'profile']
+    })
+);
+
+app.get('/login/auth/callback', passport.authenticate('google'), (req, res) => {
+  res.send('auth complete')
 });
 
 /**
@@ -56,6 +68,10 @@ app.get('/client.js', (req, res) => {
       });
     })
 });
+
+
+// Ensure we allow the react app to handle the routing
+app.use('*', express.static(path.join(__dirname, 'build')));
 
 
 /**

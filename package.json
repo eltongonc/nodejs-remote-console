@@ -5,12 +5,14 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
-    "build": "rm -rf ./build && cp -r ./dashboard/build ./build"
+    "build": "rm -rf ./build && cp -r ./client/build ./build"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
     "cookie-parser": "^1.4.4",
+    "dotenv": "^8.2.0",
     "express": "^4.13.3",
+    "mongoose": "^5.7.7",
     "node-sass": "^4.13.0",
     "passport": "^0.4.0",
     "passport-google-oauth2": "^0.2.0",

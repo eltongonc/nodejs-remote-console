@@ -71,7 +71,6 @@ class Login extends React.Component {
 					<Divider>Or</Divider>
 
 					<a className="ant-btn ant-btn-danger" href="/login/google">Login with Google</a>
-					<a className="ant-btn ant-btn-primary" href="/login/facebook">Login with Facebook</a>
 				</div>
 			</div>
 		);
