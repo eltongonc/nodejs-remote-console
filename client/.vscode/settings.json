@@ -1,0 +1,8 @@
+{
+    "files.eol": "\n",
+    "eslint.enable": true,
+    "prettier.semi": true,
+    "editor.tabSize": 4,
+    "editor.autoIndent": true,
+    "prettier.useTabs": true,
+}

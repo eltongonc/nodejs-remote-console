@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const fs = require('fs');
+const cookieParser = require('cookie-parser')
+
+const passport = require('./passport');
 
 const app = express();
 const server = http.createServer(app);
@@ -16,11 +19,16 @@ require('./sockets')(server);
 
 app.set('port', port);
 
+app.user(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
 
 // Ensure we allow the react app to handle the routing
 app.use('*', express.static(path.join(__dirname, 'build')));
+
+app.get('/login/:strategy', (req, res) => {
+  console.log('bla')
+});
 
 /**
  * Client connection url

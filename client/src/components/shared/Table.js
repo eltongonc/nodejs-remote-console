@@ -1,6 +1,7 @@
 import React from 'react';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Tag } from 'antd';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 
 function TableView({dataSource}) {
 	const columns = [
@@ -13,13 +14,13 @@ function TableView({dataSource}) {
 			title: 'Date',
 			dataIndex: 'date',
 			key: 'date',
-			render: date => moment(date, 'DD/MM/YYYY'),
+			render(date) {moment(date, 'DD/MM/YYYY');},
 		},
 		{
 			title: 'Type',
 			key: 'type',
 			dataIndex: 'type',
-			render: tag => {
+			render(tag) {
 				let color = tag.length > 5 ? 'geekblue' : 'green';
 				if (tag === 'error') {
 					color = 'volcano';
@@ -30,12 +31,16 @@ function TableView({dataSource}) {
 							{tag.toUpperCase()}
 						</Tag>
 					</span>
-				)
+				);
 			},
 		},
 	];
 	
 	return <Table dataSource={dataSource} columns={columns} />;
 }
+
+TableView.propTypes = {
+	dataSource: PropTypes.array
+};
 
 export default TableView;

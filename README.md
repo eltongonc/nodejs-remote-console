@@ -42,3 +42,4 @@ A user can create an account and then create an HTML script element on their pro
 - [ ] Generate an unique id for each project (window.origin).
 - [ ] Utilize the [socket.io rooms feature](https://socket.io/docs/rooms-and-namespaces/#Rooms) to track different projects seperate.
 - [ ] Add database to store previous messages.
+- [ ] Merge the two packages.json files from the root and ./client/ dir
