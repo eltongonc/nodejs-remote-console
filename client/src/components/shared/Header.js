@@ -13,7 +13,6 @@ function Header({history}) {
 
 	return(
 		<AntHeader className="header">
-			<div className="logo" />
 			<Menu
 				theme="dark"
 				mode="horizontal"

@@ -8,7 +8,6 @@ import SideNav from '../shared/SideNav';
 function DashboardWrapper({children}) {
 	return (
 		<Layout>
-			<Header/>
 			<Layout>
 				<SideNav/>
 				<Layout style={{ padding: '0 24px 24px' }}>
