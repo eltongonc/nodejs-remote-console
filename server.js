@@ -5,6 +5,7 @@ const path = require('path');
 const http = require('http');
 const fs = require('fs');
 const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
 
 const passport = require('./lib/passport');
 
@@ -25,10 +26,12 @@ require('./lib/sockets')(server);
 
 app.set('port', port);
 
+// Cookies
 app.use(cookieSession({
   maxAge: 24*60*60*1000,
   keys: [process.env.COOKIE_KEY]
 }));
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
@@ -48,7 +51,15 @@ app.get('/login/google', passport.authenticate('google', {
 );
 
 app.get('/login/auth/callback', passport.authenticate('google'), (req, res) => {
-  res.send('auth complete')
+  const cookie = req.cookies['express:sess'];
+
+  res.cookie('token', cookie);
+  res.redirect('/dashboard');
+});
+
+app.get('/logout', (req,res) => {
+  req.logOut();
+  res.redirect('/');
 });
 
 /**
