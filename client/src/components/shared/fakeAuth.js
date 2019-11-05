@@ -1,12 +1,28 @@
+const axios = require('axios');
+
+const baseUrl = 'http://localhost:3000';
+
 const fakeAuth = {
-	isAuthenticated: false,
-	authenticate(cb) {
-		this.isAuthenticated = true;
-		setTimeout(cb, 100);
+	isAuthenticated: localStorage.userToken,
+	authenticate(callback) {
+		axios.get(baseUrl + '/user').then((res)=> {
+			console.log(res);
+			if (res) {
+				localStorage.userToken = res.id;
+			}
+			callback();
+		});
 	},
-	signout(cb) {
+	
+	signout(callback) {
 		this.isAuthenticated = false;
-		setTimeout(cb, 100);
+
+		localStorage.removeItem('userToken');
+
+		axios.get(baseUrl + '/logout');
+
+		callback();
+
 	}
 };
 
