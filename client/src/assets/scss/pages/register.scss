@@ -1,11 +1,11 @@
-.login-form {
+.register-form {
 	height: 100%;
 	background-color: #fbfbfb;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	.form {
-		max-width: calc(300px + 4rem);
+		min-width: calc(300px + 4rem);
 		background-color: white;
 		padding: 2rem;
 		.form-title {

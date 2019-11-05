@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Typography, Divider } from 'antd';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
 import fakeAuth from '../shared/fakeAuth';
 
 const { Title } = Typography;
@@ -64,13 +66,16 @@ class Login extends React.Component {
 						<Button type="primary" htmlType="submit" className="login-form-button">
 							Log in
 						</Button>
-						Or <a href="">register now!</a>
+						Or <Link to="/register">register now!</Link>
 						</Form.Item>
 					</Form>
 
-					<Divider>Or</Divider>
-
-					<a className="ant-btn ant-btn-danger" href="/login/google">Login with Google</a>
+					{/**
+						Temp disabled google login
+						<Divider>Or</Divider>
+	
+						<a className="ant-btn ant-btn-danger" href="/login/google">Login with Google</a>
+					 */}
 				</div>
 			</div>
 		);
