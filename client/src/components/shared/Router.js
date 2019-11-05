@@ -2,20 +2,12 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import UserAuth from './UserAuth';
 import Login from '../pages/Login.js';
 import Dashboard from '../pages/Dashboard.js';
-import fakeAuth from './fakeAuth.js';
 // import ForgotPassword from '../pages/ForgotPassword.js';
 // import PageNotFound from '../pages/PageNotFound';
 // import MyAccount from '../pages/MyAccount.js';
-
-const PrivateRoute = ({ component: Component, ...rest}) => (
-	<Route {...rest} render={(props) => (
-		fakeAuth.isAuthenticated === true
-			? <Component {...props} />
-			: <Redirect to='/login' />
-	)} />
-);
 
 function Router() {
 	return (
@@ -23,8 +15,11 @@ function Router() {
 			
 			{/** Login page */}
 			<Route path="/login" component={Login} exact/>
+
+			<UserAuth>
+				<Route path="/" component={Dashboard}/>
+			</UserAuth>
 			
-			<PrivateRoute path="/" component={Dashboard}/>
 			
 			{/** 404 page 
 				<Route path='/page_not_found' component={PageNotFound} />

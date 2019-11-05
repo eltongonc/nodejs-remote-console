@@ -9,8 +9,6 @@ const { SubMenu } = Menu;
 
 function SideNav({history}) {
 	const logOut = () => {
-		console.log('asd');
-		
 		fakeAuth.signout(() => {
 			history.push('/');
 		});

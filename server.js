@@ -6,6 +6,7 @@ const http = require('http');
 const fs = require('fs');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const passport = require('./lib/passport');
 
@@ -32,6 +33,9 @@ app.use(cookieSession({
   keys: [process.env.COOKIE_KEY]
 }));
 app.use(cookieParser());
+
+// Cross browser support
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
@@ -60,6 +64,17 @@ app.get('/login/auth/callback', passport.authenticate('google'), (req, res) => {
 app.get('/logout', (req,res) => {
   req.logOut();
   res.redirect('/');
+});
+
+/**
+ * API endpoint to verify auth on frontend
+ */
+app.get('/user', (req, res) => {
+  if (req.user) {
+    res.send({user: req.user});
+  } else {
+    res.send({user: null});
+  }
 });
 
 /**
