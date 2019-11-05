@@ -4,78 +4,120 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const fs = require('fs');
-const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const passport = require('./lib/passport');
+const auth = require('./lib/jwt');
+const User = require('./models/Users');
 
 const app = express();
 const server = http.createServer(app);
-
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
+app.set('port', port);
+
+
+/**
+ * Config
+ */
 
 // init database
-require('./lib/db');
+mongoose.connect(process.env.MONGO_DB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.set('debug', true);
 
 // init sockets
 require('./lib/sockets')(server);
 
-
-app.set('port', port);
-
-// Cookies
-app.use(cookieSession({
-  maxAge: 24*60*60*1000,
-  keys: [process.env.COOKIE_KEY]
-}));
-app.use(cookieParser());
-
 // Cross browser support
 app.use(cors());
 
+// parse form
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Static dirs
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
+
+// Cookies
+// app.use(cookieParser());
+app.use(session({
+  cookie: {maxAge: 6000},
+  resave: false,
+  saveUninitialized: false,
+  secret: process.env.COOKIE_KEY,
+}));
+
 
 /**
  * Initialize passport
  */
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
+
 
 /**
- * Passport auth urls
+ * Routes
  */
-app.get('/login/google', passport.authenticate('google', {
-      scope: ['email', 'profile']
-    })
-);
-
-app.get('/login/auth/callback', passport.authenticate('google'), (req, res) => {
-  const cookie = req.cookies['express:sess'];
-
-  res.cookie('token', cookie);
-  res.redirect('/dashboard');
-});
-
+app.use('/login', require('./routes/login'));
+app.use('/user', require('./routes/user'));
 app.get('/logout', (req,res) => {
   req.logOut();
   res.redirect('/');
 });
-
-/**
- * API endpoint to verify auth on frontend
- */
-app.get('/user', (req, res) => {
-  if (req.user) {
-    res.send({user: req.user});
-  } else {
-    res.send({user: null});
-  }
+app.get('/forgot-password', (req, res) => {
+  res.send('<h4>Too bad <h4/><p>try admin - admin</p>');
 });
+app.post('/register', auth.optional, (req, res) => {
+  const { user } = req.body;
+
+	if(!user.email) {
+		return res.status(422).json({
+		  errors: {
+			email: 'is required',
+		  },
+		});
+	}
+	
+	if(!user.password) {
+		return res.status(422).json({
+			errors: {
+				password: 'is required',
+			},
+		});
+  }
+  
+  User.findOne({email : user.email}).then((currentUser) => {
+    if (currentUser) {
+      res.status(422).json({
+        errors: {
+          message: 'User already exists',
+        },
+      });
+    } else {
+      const newUser = new User({
+        email: user.email,
+      })
+
+      newUser.setPassword(user.password)
+      
+      newUser.save().then(() => {
+        res.status(200).json({
+          message: 'User created',
+          user: newUser.toAuthJSON(),
+        });
+      }).catch(err => { throw err });
+    }
+  }).catch(err => { throw err });
+});
+
+
 
 /**
  * Client connection url
@@ -126,15 +168,20 @@ app.use((req, res, next) => {
 
 // development error handler
 if (app.get('env') === 'development') {
-    app.use((err, req, res, next) => {
+    app.use((err, req, res) => {
         res.status(err.status || 500);
         // redirect to a page on the UI that catches the error and logs it
-        res.redirect('/500')
+        res.json({
+          errors: {
+            message: err.message,
+            error: err,
+          },
+        });
     });
 }
 
 // production error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     res.status(err.status || 500);
     // redirect to a page on the UI that catches the error and logs it
     res.redirect('/500')
