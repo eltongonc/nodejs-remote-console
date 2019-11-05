@@ -3,7 +3,6 @@ import { Form, Input, Button, Checkbox, Typography, Divider } from 'antd';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import fakeAuth from '../shared/fakeAuth';
 import api from '../api';
 import { openNotificationWithIcon } from '../shared/notifications';
 
@@ -124,11 +123,6 @@ class Register extends React.Component {
 
 					<Divider>Or</Divider>
 					<Link className="ant-btn ant-btn-link" to="/login">Go to login page</Link>
-					{/**
-						Temp disabled google login
-	
-						<a className="ant-btn ant-btn-danger" href="/login/google">Login with Google</a>
-					 */}
 				</div>
 			</div>
 		);

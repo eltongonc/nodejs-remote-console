@@ -8,7 +8,7 @@ router.post('/user', auth.optional, (req, res, next) => {
 	if(!user.email) {
 		return res.status(422).json({
 		  errors: {
-			email: 'is required',
+			message: 'Email is required',
 		  },
 		});
 	}
@@ -16,7 +16,7 @@ router.post('/user', auth.optional, (req, res, next) => {
 	if(!user.password) {
 		return res.status(422).json({
 			errors: {
-				password: 'is required',
+				message: 'Password is required',
 			},
 		});
 	}
@@ -28,11 +28,16 @@ router.post('/user', auth.optional, (req, res, next) => {
 			const user = authUser;
 			user.token = authUser.generateJWT();
 
-			return res.json(({ user: user.toAuthJSON() }));
+			return res.json(({ 
+				message: 'Access granted',
+				user: user.toAuthJSON() 
+			}));
 		}
 
 		return res.status(422).json({
-			errors: 'Auth failed',
+			errors: {
+				message: 'Incorrect username or password'
+			},
 		  });
 	})(req,res,next)
 });

@@ -5,21 +5,10 @@ import axios from 'axios';
 function UserAuth({ children }) {
 	const [user, setUser] = useState({});
 
-	useEffect(() => {
-		axios({
-			method: 'GET',
-			url: '/user'
-		}).then(res => {
-			const { id } = res.data.user;
-			// probably not sent the entire user object
-			setUser({id});
-			localStorage.userToken = id;
-		}).catch(err => {
-			setUser(null);
-		});
-	}, []);
+	// check if token is valid
 
-	if (user) {
+
+	if (localStorage.RC_TOKEN) {
 		return children ;
 	} 
 

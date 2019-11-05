@@ -1,15 +1,17 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Popconfirm } from 'antd';
 
-import fakeAuth from './fakeAuth';
+
+import api from '../api';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 function SideNav({history}) {
 	const logOut = () => {
-		fakeAuth.signout(() => {
+
+		api.logOut(() => {
 			history.push('/');
 		});
 	};
@@ -29,40 +31,54 @@ function SideNav({history}) {
 					</span>
 				</Menu.Item>
 
-				<SubMenu
-					key="sub2"
-					title={
+				{/**
+					Temp disabled menu items 
+					<SubMenu
+						key="sub2"
+						title={
+							<span>
+								<Icon type="project" />
+								Projects
+							</span>
+						}
+					>
+						<Menu.Item key="1">Project 1</Menu.Item>
+						<Menu.Item key="2">Project 2</Menu.Item>
+					</SubMenu>
+	
+					<Menu.Item key="sub3">
 						<span>
-							<Icon type="project" />
-							Projects
+							<Icon type="bug" />
+							Issues
 						</span>
-					}
-				>
-					<Menu.Item key="1">Project 1</Menu.Item>
-					<Menu.Item key="2">Project 2</Menu.Item>
-				</SubMenu>
+					</Menu.Item>
+	
+					<SubMenu
+						key="sub4"
+						title={
+							<span>
+								<Icon type="setting" />
+								Settings
+							</span>
+						}
+					>
+						<Menu.Item key="1">Setting 1</Menu.Item>
+						<Menu.Item key="2">Setting 2</Menu.Item>
+					</SubMenu>
+				 */}
 
-				<Menu.Item key="sub3">
-					<span>
-						<Icon type="bug" />
-						Issues
-					</span>
+				<Menu.Item key="sub5">
+					<Popconfirm
+						title="Are you sure?"
+						onConfirm={logOut}
+						placement="bottom"
+						icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
+					>
+						<a href="#">
+							<span><Icon type="logout" /> Log out</span>
+						</a>
+					</Popconfirm>,
 				</Menu.Item>
-
-				<SubMenu
-					key="sub4"
-					title={
-						<span>
-							<Icon type="setting" />
-							Settings
-						</span>
-					}
-				>
-					<Menu.Item key="1">Setting 1</Menu.Item>
-					<Menu.Item key="2">Setting 2</Menu.Item>
-				</SubMenu>
-
-				<Menu.Item key="sub5" onClick={logOut}><span><Icon type="logout" /> Log out</span></Menu.Item>
 			</Menu>
 		</Sider>
 	);

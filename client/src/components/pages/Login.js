@@ -3,7 +3,8 @@ import { Form, Icon, Input, Button, Checkbox, Typography, Divider } from 'antd';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import fakeAuth from '../shared/fakeAuth';
+import api from '../api';
+import { openNotificationWithIcon } from '../shared/notifications';
 
 const { Title } = Typography;
  
@@ -17,11 +18,17 @@ class Login extends React.Component {
 	handleSubmit = e => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
-		  if (!err && values.username === 'admin' && values.password === 'admin') {
-			fakeAuth.authenticate(() => {
-				this.props.history.push('/');
+			const data = {user: values};
+	
+			api.verifyUser(data, (error, res) => {
+				if (error) {
+					openNotificationWithIcon('error', error.data.errors.message, '');
+				} else {
+					openNotificationWithIcon('success', res.message, '');
+					console.log(res.user);
+					this.props.history.push('/');
+				}
 			});
-		  }
 		});
 	};
 
@@ -35,12 +42,12 @@ class Login extends React.Component {
 
 					<Form onSubmit={this.handleSubmit} className="ant-card">
 						<Form.Item>
-						{getFieldDecorator('username', {
-							rules: [{ required: true, message: 'Please input your username!' }],
+						{getFieldDecorator('email', {
+							rules: [{ type: 'email', required: true, message: 'Please input your username!' }],
 						})(
 							<Input
 							prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-							placeholder="Username"
+							placeholder="Email"
 							/>,
 						)}
 						</Form.Item>
@@ -60,7 +67,7 @@ class Login extends React.Component {
 							valuePropName: 'checked',
 							initialValue: true,
 						})(<Checkbox>Remember me</Checkbox>)}
-						<a className="login-form-forgot" href="">
+						<a className="login-form-forgot" href="" style={{visibility: 'hidden'}}>
 							Forgot password
 						</a>
 						<Button type="primary" htmlType="submit" className="login-form-button">
