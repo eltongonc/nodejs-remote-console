@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'https://nodejs-remote-console.herokuapp.com';
 
 const clientEl = document.getElementById('remote-client');
 
