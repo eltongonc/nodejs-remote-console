@@ -1,25 +1,27 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Typography, Divider } from 'antd';
 import PropTypes from 'prop-types';
-import fakeAuth from '../shared/fakeAuth';
+import { Link } from 'react-router-dom';
+
+import api from '../api';
+import { openNotificationWithIcon } from '../shared/notifications';
 
 const { Title } = Typography;
  
 class Login extends React.Component {
-	constructor(props) {
-		super(props);
-		console.log(props);
-		
-	}
-
 	handleSubmit = e => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
-		  if (!err && values.username === 'admin' && values.password === 'admin') {
-			fakeAuth.authenticate(() => {
-				this.props.history.push('/');
+			const data = {user: values};
+	
+			api.verifyUser(data, (error, res) => {
+				if (error) {
+					openNotificationWithIcon('error', error.data.errors.message, '');
+				} else {
+					openNotificationWithIcon('success', res.message, '');
+					this.props.history.push('/');
+				}
 			});
-		  }
 		});
 	};
 
@@ -33,12 +35,12 @@ class Login extends React.Component {
 
 					<Form onSubmit={this.handleSubmit} className="ant-card">
 						<Form.Item>
-						{getFieldDecorator('username', {
-							rules: [{ required: true, message: 'Please input your username!' }],
+						{getFieldDecorator('email', {
+							rules: [{ type: 'email', required: true, message: 'Please input your username!' }],
 						})(
 							<Input
 							prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-							placeholder="Username"
+							placeholder="Email"
 							/>,
 						)}
 						</Form.Item>
@@ -58,19 +60,22 @@ class Login extends React.Component {
 							valuePropName: 'checked',
 							initialValue: true,
 						})(<Checkbox>Remember me</Checkbox>)}
-						<a className="login-form-forgot" href="">
+						<a className="login-form-forgot" href="" style={{visibility: 'hidden'}}>
 							Forgot password
 						</a>
 						<Button type="primary" htmlType="submit" className="login-form-button">
 							Log in
 						</Button>
-						Or <a href="">register now!</a>
+						Or <Link to="/register">register now!</Link>
 						</Form.Item>
 					</Form>
 
-					<Divider>Or</Divider>
-
-					<a className="ant-btn ant-btn-danger" href="/login/google">Login with Google</a>
+					{/**
+						Temp disabled google login
+						<Divider>Or</Divider>
+	
+						<a className="ant-btn ant-btn-danger" href="/login/google">Login with Google</a>
+					 */}
 				</div>
 			</div>
 		);

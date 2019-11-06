@@ -80,7 +80,7 @@ app.post('/register', auth.optional, (req, res) => {
 	if(!user.email) {
 		return res.status(422).json({
 		  errors: {
-			email: 'is required',
+			message: 'Email is required',
 		  },
 		});
 	}
@@ -88,7 +88,7 @@ app.post('/register', auth.optional, (req, res) => {
 	if(!user.password) {
 		return res.status(422).json({
 			errors: {
-				password: 'is required',
+				message: 'Password is required',
 			},
 		});
   }

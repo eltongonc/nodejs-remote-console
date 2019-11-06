@@ -1,12 +1,13 @@
 import React from 'react';
-import { Layout, Col, Card, Row, Typography } from 'antd';
+import { Layout, Col, Card, Row, Typography, Spin, Alert } from 'antd';
 import PropTypes from 'prop-types';
 
 import TableView from '../shared/Table';
-import DashboardWrapper from './DashboardWrapper';
+import PageWrapper from './PageWrapper';
 
 import socket from '../socket';
 import { openNotificationWithIcon } from '../shared/notifications';
+import api from '../api';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -17,8 +18,24 @@ class Dashboard extends React.Component {
 
 		this.state = {
 			logs: [],
-			errors: [],
+			issues: [],
+			projects: [],
+			isLoading: true,
 		};
+
+		api.getIssues((err, issues) => {
+			api.getProjects((err, projects) => {
+				issues = issues || [];
+				projects = projects || [];
+
+				this.setState({
+					isLoading: false,
+					issues: issues,
+					projects
+				});
+			});
+		});
+
 	}
 
 	componentDidMount() {
@@ -27,40 +44,50 @@ class Dashboard extends React.Component {
 		});
 
 		socket.on('display-log', (message) => {
-			const { logs } = this.state;
+			const { issues } = this.state;
 
-			logs.push(message);
+			issues.push(message);
 
-			this.setState({ logs });
+			this.setState({ issues });
 		});
   
 		// Color it red
 		socket.on('display-error', (message) => {
-			const { errors } = this.state;
+			const { issues } = this.state;
 
-			errors.push(message);
+			issues.push(message);
 
-			this.setState({ errors });
+			this.setState({ issues });
 		});
 	}
 
 	render() {
+		if (this.state.isLoading) {
+			return (
+				<div className="loader">
+					<Spin tip="Loading..." size="large"/>
+				</div>
+			);
+		}
+
+		const { projects, issues } = this.state;
+		
 		return(
-			<DashboardWrapper>
+			<PageWrapper>
 				<Row gutter={16} style={{margin: '24px 0'}}>
 					<Col span={8}>
 						<Card title="Logs" bordered={false}>
-							<Title>0</Title>
+							<Title>{issues.filter((item) => item.type === 'log').length}</Title>
 						</Card>
 					</Col>
 					<Col span={8}>
-						<Card title="Errors" bordered={false}>
-							<Title>0</Title>
+						<Card title="Issues" bordered={false}>
+							<Title>{issues.filter((item) => item.type === 'error').length}</Title>
 						</Card>
 					</Col>
 					<Col span={8}>
 						<Card title="Projects" bordered={false}>
-							<Title>0</Title>
+							<Title>{projects.length}</Title>
 						</Card>
 					</Col>
 				</Row>
@@ -72,26 +99,29 @@ class Dashboard extends React.Component {
 						minHeight: 280,
 					}}
 				>
-					<Title level={4}>Logs</Title>
-					<TableView dataSource={this.state.logs.map((item) => {
+					<Title level={4}>Issues</Title>
+					<TableView dataSource={issues.map((item, i) => {
 						return {
-							name: item,
-							date: new Date().toString(),
-							type: 'log',
+							name: item.name,
+							date: item.date,
+							type: item.type,
+							key: i,
 						};
 					})}/>
-	
-					<br/>
-					<Title level={4}>Errors</Title>
-					<TableView dataSource={this.state.errors.map((item) => {
-						return {
-							name: item,
-							date: new Date().toString(),
-							type: 'error',
-						};
-					})}/>
+
+					<Alert
+						message="Usage"
+						banner={true}
+						description={
+							<p>
+								To monitor one of you projects please add the following tag to your html 
+								<strong>{`<script id="remote-client" src="${window.location.origin}/client.js"></script>`}</strong>
+							</p>
+						}
+						type="info"
+					/>
 				</Content>
-			</DashboardWrapper>
+			</PageWrapper>
 		);
 	}
 }
