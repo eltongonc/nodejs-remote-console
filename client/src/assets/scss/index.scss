@@ -1,7 +1,8 @@
+// Shared
+@import './shared/reset.scss';
+@import './shared/loader.scss';
+
 // Pages 
 @import './pages/dashboard.scss';
 @import './pages/login.scss';
 @import './pages/register.scss';
-
-// Shared
-@import './shared/reset.scss';

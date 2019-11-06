@@ -9,12 +9,6 @@ import { openNotificationWithIcon } from '../shared/notifications';
 const { Title } = Typography;
  
 class Login extends React.Component {
-	constructor(props) {
-		super(props);
-		console.log(props);
-		
-	}
-
 	handleSubmit = e => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
@@ -25,7 +19,6 @@ class Login extends React.Component {
 					openNotificationWithIcon('error', error.data.errors.message, '');
 				} else {
 					openNotificationWithIcon('success', res.message, '');
-					console.log(res.user);
 					this.props.history.push('/');
 				}
 			});

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Header from '../shared/Header';
 import SideNav from '../shared/SideNav';
 
-function DashboardWrapper({children}) {
+function PageWrapper({children}) {
 	return (
 		<Layout>
 			<Layout>
@@ -19,8 +19,8 @@ function DashboardWrapper({children}) {
 }
 
 
-DashboardWrapper.propTypes = {
+PageWrapper.propTypes = {
 	children: PropTypes.any
 };
 
-export default DashboardWrapper;
+export default PageWrapper;

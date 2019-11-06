@@ -14,19 +14,27 @@ const projects = [{
 const issues = [{
 	"id": 1,
 	"project_id": 1,
-	"title": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus."
+	"date": new Date(),
+	"type": 'log',
+	"name": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus."
   }, {
 	"id": 2,
 	"project_id": 1,
-	"title": "Sed sagittis."
+	"date": new Date(),
+	"type": 'error',
+	"name": "Sed sagittis."
   }, {
 	"id": 3,
 	"project_id": 2,
-	"title": "Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
+	"date": new Date(),
+	"type": 'log',
+	"name": "Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis."
   }, {
 	"id": 4,
 	"project_id": 2,
-	"title": "Vivamus vestibulum sagittis sapien."
+	"date": new Date(),
+	"type": 'error',
+	"name": "Vivamus vestibulum sagittis sapien."
 }]
 
 router.get('/', (req, res) => {

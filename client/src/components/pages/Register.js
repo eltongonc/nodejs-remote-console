@@ -11,7 +11,6 @@ const { Title } = Typography;
 class Register extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log(props);
 		
 		this.state = {
 			confirmDirty: false,

@@ -34,7 +34,36 @@ const api = {
 		setTimeout(() => {
 			callback();
 		}, 100);
-	} 
+	},
+
+	getIssues(callback) {
+		axios({
+			method: 'GET',
+			url: baseUrl + '/user/issues/',
+			headers: {
+				'Authorization': 'Token ' + localStorage.RC_TOKEN,
+			}
+		}).then((res) => {
+			
+			if (callback) {
+				callback(null, res.data);
+			}
+		}).catch((err) => { callback(err.response); });
+	},
+
+	getProjects(callback) {
+		axios({
+			method: 'GET',
+			url: baseUrl + '/user/projects/',
+			headers: {
+				'Authorization': 'Token ' + localStorage.RC_TOKEN,
+			}
+		}).then((res) => {
+			if (callback) {
+				callback(null, res.data);
+			}
+		}).catch((err) => { callback(err.response); });
+	}
 };
 
 
