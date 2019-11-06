@@ -51,6 +51,22 @@ const api = {
 		}).catch((err) => { callback(err.response); });
 	},
 
+	addIssue(payload, callback) {
+		axios({
+			method: 'POST',
+			url: baseUrl + '/user/issue/',
+			headers: {
+				'Authorization': 'Token ' + localStorage.RC_TOKEN,
+			},
+			data: payload,
+		}).then((res) => {
+			
+			if (callback) {
+				callback(null, res.data);
+			}
+		}).catch((err) => { callback(err.response); });
+	},
+
 	getProjects(callback) {
 		axios({
 			method: 'GET',
@@ -63,7 +79,23 @@ const api = {
 				callback(null, res.data);
 			}
 		}).catch((err) => { callback(err.response); });
-	}
+	},
+
+	addProject(payload, callback) {
+		axios({
+			method: 'POST',
+			url: baseUrl + '/user/project/',
+			headers: {
+				'Authorization': 'Token ' + localStorage.RC_TOKEN,
+			},
+			data: payload,
+		}).then((res) => {
+			
+			if (callback) {
+				callback(null, res.data);
+			}
+		}).catch((err) => { callback(err.response); });
+	},
 };
 
 
