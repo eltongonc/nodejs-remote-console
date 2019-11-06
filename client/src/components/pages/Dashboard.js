@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Col, Card, Row, Typography, Spin } from 'antd';
+import { Layout, Col, Card, Row, Typography, Spin, Alert } from 'antd';
 import PropTypes from 'prop-types';
 
 import TableView from '../shared/Table';
@@ -108,6 +108,18 @@ class Dashboard extends React.Component {
 							key: i,
 						};
 					})}/>
+
+					<Alert
+						message="Usage"
+						banner={true}
+						description={
+							<p>
+								To monitor one of you projects please add the following tag to your html 
+								<strong>{`<script id="remote-client" src="${window.location.origin}/client.js"></script>`}</strong>
+							</p>
+						}
+						type="info"
+					/>
 				</Content>
 			</PageWrapper>
 		);
