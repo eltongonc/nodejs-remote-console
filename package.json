@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "init:client": "cd ./client && npm i",
-    "build": "npm init:client && npm run build && cd ../ && rm -rf ./build && cp -r ./client/build ./build"
+    "build": "npm run init:client && npm run build && cd ../ && rm -rf ./build && cp -r ./client/build ./build"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
