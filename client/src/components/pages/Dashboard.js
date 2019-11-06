@@ -25,40 +25,89 @@ class Dashboard extends React.Component {
 
 		api.getIssues((err, issues) => {
 			api.getProjects((err, projects) => {
-				issues = issues || [];
-				projects = projects || [];
-
-				this.setState({
-					isLoading: false,
-					issues: issues,
-					projects
-				});
+				if (projects) {
+					this.setState({
+						isLoading: false,
+						issues,
+						projects
+					});
+				} else {
+					// for now manualy add a project
+					const data = {
+						project: {
+							name: 'Demo project',
+							url: 'http://localhost:3001',
+						}
+					};
+					api.addProject(data, (error, res) => {
+						if (error) {
+							openNotificationWithIcon('error', error.data.errors.message, '');
+						} else {
+							openNotificationWithIcon('success', res.message, '');
+							this.props.history.push('/');
+						}
+					});
+				}
 			});
 		});
 
 	}
 
 	componentDidMount() {
+		
 		socket.on('new-connection', () => {
 			openNotificationWithIcon('info', 'New User Connected', 'Connected...');
 		});
 
 		socket.on('display-log', (message) => {
 			const { issues } = this.state;
+			const issue = {
+				project_id: this.state.projects[0]._id,
+				type: 'log',
+				name: message,
+			};
 
-			issues.push(message);
+			const data = { issue }; 
+
+			issues.push(issue);
 
 			this.setState({ issues });
+
+
+			api.addIssue(data, (error, res) => {
+				if (error) {
+					openNotificationWithIcon('error', error.data.errors.message, '');
+				} else {
+					openNotificationWithIcon('success', res.message, '');
+				}
+			});
 		});
-  
+	
 		// Color it red
 		socket.on('display-error', (message) => {
 			const { issues } = this.state;
 
-			issues.push(message);
+			const issue = {
+				project_id: this.state.projects[0]._id,
+				type: 'error',
+				name: message,
+			};
+
+			const data = { issue }; 
+
+			issues.push(issue);
 
 			this.setState({ issues });
+
+			api.addIssue(data, (error, res) => {
+				if (error) {
+					openNotificationWithIcon('error', error.data.errors.message, '');
+				} else {
+					openNotificationWithIcon('success', res.message, '');
+				}
+			});
 		});
+	
 	}
 
 	render() {
@@ -71,7 +120,7 @@ class Dashboard extends React.Component {
 		}
 
 		const { projects, issues } = this.state;
-		
+
 		return(
 			<PageWrapper>
 				<Row gutter={16} style={{margin: '24px 0'}}>
@@ -109,17 +158,20 @@ class Dashboard extends React.Component {
 						};
 					})}/>
 
-					<Alert
-						message="Usage"
-						banner={true}
-						description={
-							<p>
-								To monitor one of you projects please add the following tag to your html 
-								<strong>{`<script id="remote-client" src="${window.location.origin}/client.js"></script>`}</strong>
-							</p>
-						}
-						type="info"
-					/>
+					<div className="banner">
+						<Alert
+							message="Usage"
+							banner={true}
+							closable
+							description={
+								<p>
+									To monitor one of you projects please add the following tag to your html 
+									<strong>{`<script id="remote-client" src="${window.location.origin}/client.js"></script>`}</strong>
+								</p>
+							}
+							type="info"
+						/>
+					</div>
 				</Content>
 			</PageWrapper>
 		);

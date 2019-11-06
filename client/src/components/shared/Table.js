@@ -21,7 +21,9 @@ function TableView({dataSource}) {
 			key: 'type',
 			dataIndex: 'type',
 			render(tag) {
-				let color = tag.length > 5 ? 'geekblue' : 'green';
+				console.log(tag);
+				
+				let color = 'green';
 				if (tag === 'error') {
 					color = 'volcano';
 				}

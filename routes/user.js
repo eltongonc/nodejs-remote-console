@@ -75,6 +75,9 @@ router.get('/projects/:id', auth.required, (req, res) => {
 router.post('/issue/', auth.required, (req, res) => {
 	const { issue } = req.body;
 
+	console.log({issue});
+	
+
 	if(!issue.project_id) {
 		return res.status(422).json({
 			errors: {
@@ -111,6 +114,8 @@ router.post('/issue/', auth.required, (req, res) => {
           data: newIssue,
         });
       }).catch(err => {
+		  console.log({err});
+		  
 		res.status(422).json({
 			errors: {
 				message: 'Something went wrong while creating the issue',
