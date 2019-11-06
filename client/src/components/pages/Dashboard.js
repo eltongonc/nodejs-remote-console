@@ -25,36 +25,16 @@ class Dashboard extends React.Component {
 
 		api.getIssues((err, issues) => {
 			api.getProjects((err, projects) => {
-				if (projects) {
-					this.setState({
-						isLoading: false,
-						issues,
-						projects
-					});
-				} else {
-					// for now manualy add a project
-					const data = {
-						project: {
-							name: 'Demo project',
-							url: 'http://localhost:3001',
-						}
-					};
-					api.addProject(data, (error, res) => {
-						if (error) {
-							openNotificationWithIcon('error', error.data.errors.message, '');
-						} else {
-							openNotificationWithIcon('success', res.message, '');
-							this.props.history.push('/');
-						}
-					});
-				}
+				this.setState({
+					isLoading: false,
+					issues,
+					projects
+				});
 			});
 		});
-
 	}
 
-	componentDidMount() {
-		
+	initSocket() {
 		socket.on('new-connection', () => {
 			openNotificationWithIcon('info', 'New User Connected', 'Connected...');
 		});
@@ -108,6 +88,26 @@ class Dashboard extends React.Component {
 			});
 		});
 	
+	}
+
+	componentDidMount() {
+		if (this.state.projects.length <=0) {
+			// for now manualy add a project
+			const data = {
+				project: {
+					name: 'Demo project',
+					url: 'http://localhost:3001',
+				}
+			};
+			api.addProject(data, (error, res) => {
+				if (error) {
+					openNotificationWithIcon('error', error.data.errors.message, '');
+				} else {
+					openNotificationWithIcon('success', res.message, '');
+					this.initSocket();
+				}
+			});
+		}
 	}
 
 	render() {
