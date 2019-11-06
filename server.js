@@ -67,12 +67,8 @@ app.use(session({
  */
 app.use('/login', require('./routes/login'));
 app.use('/user', require('./routes/user'));
-app.get('/logout', (req,res) => {
-  req.logOut();
-  res.redirect('/');
-});
 app.get('/forgot-password', (req, res) => {
-  res.send('<h4>Too bad <h4/><p>try admin - admin</p>');
+  res.send('<h4>Too bad!<h4/>');
 });
 app.post('/register', auth.optional, (req, res) => {
   const { user } = req.body;
